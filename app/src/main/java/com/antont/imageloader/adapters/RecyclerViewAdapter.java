@@ -1,5 +1,7 @@
 package com.antont.imageloader.adapters;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.antont.imageloader.R;
+import com.antont.imageloader.activities.ImageDetailActivity;
+import com.antont.imageloader.activities.MainActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +32,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
-
         return new ViewHolder(v);
     }
 
@@ -40,6 +43,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         Picasso.with(holder.mImageView.getContext())
                 .load(item.getImageURL())
+                .fit()
+                .centerCrop()
                 .placeholder(R.drawable.placeholder_image)
                 .into(holder.mImageView, new Callback() {
                     @Override
@@ -54,10 +59,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 });
 
-        holder.mImageView.setOnClickListener((v)->{holder.mImageView.setColorFilter(Color.BLACK);});
+        holder.mImageView.setOnClickListener((v) -> {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((MainActivity) v.getContext());
+                Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
+                intent.putExtra(ImageDetailActivity.ARG_ITEM_ID, mDataset.get(position).getImageURL());
+                v.getContext().startActivity(intent, options.toBundle());
+            }
+        });
     }
 
-    private int getRandomColor(){
+    private int getRandomColor() {
         Random rnd = new Random();
         return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
