@@ -24,8 +24,8 @@ import com.squareup.picasso.Picasso;
 public class ImageDetailActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback {
 
     public final static int PERMISSION_REQUEST_CODE = 1024;
+    public final static String ARG_ITEM_ID = "ARG_ITEM_ID";
 
-    public static String ARG_ITEM_ID = "ARG_ITEM_ID";
     private ImageView mImageView;
 
     @Override
@@ -50,7 +50,7 @@ public class ImageDetailActivity extends AppCompatActivity implements OnRequestP
                 saveImageToGallery();
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    Toast.makeText(this, "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Write External Storage permission allows us to do save images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
                 } else {
                     ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
                 }

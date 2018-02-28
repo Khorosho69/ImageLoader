@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.antont.imageloader.R;
-import com.antont.imageloader.TextDrawer;
+import com.antont.imageloader.utilities.TextDrawerUtility;
 import com.antont.imageloader.activities.ImageDetailActivity;
 import com.antont.imageloader.activities.MainActivity;
 import com.squareup.picasso.Callback;
@@ -58,7 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         holder.mImageView.setBackgroundColor(Color.WHITE);
                         holder.mProgressBar.setVisibility(View.GONE);
 
-                        TextDrawer drawer = new TextDrawer();
+                        TextDrawerUtility drawer = new TextDrawerUtility();
                         drawer.drawTextOverImage(holder.mImageView, "New");
                     }
 

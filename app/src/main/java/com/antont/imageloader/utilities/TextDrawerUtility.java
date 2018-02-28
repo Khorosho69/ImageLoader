@@ -1,4 +1,4 @@
-package com.antont.imageloader;
+package com.antont.imageloader.utilities;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
-public class TextDrawer {
+public class TextDrawerUtility {
 
     public void drawTextOverImage(ImageView image, String text) {
         int imageWidth = image.getWidth();
