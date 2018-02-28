@@ -1,7 +1,5 @@
 package com.antont.imageloader.adapters;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,8 +10,6 @@ import android.widget.ProgressBar;
 
 import com.antont.imageloader.R;
 import com.antont.imageloader.utilities.TextDrawerUtility;
-import com.antont.imageloader.activities.ImageDetailActivity;
-import com.antont.imageloader.activities.MainActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +22,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private List<ImageItem> mDataset;
 
+    private OnRecyclerViewInteractionListener mListener;
+
     public RecyclerViewAdapter(List<ImageItem> mDataset) {
         this.mDataset = mDataset;
     }
@@ -33,6 +31,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
+        if (parent.getContext() instanceof OnRecyclerViewInteractionListener) {
+            mListener = (OnRecyclerViewInteractionListener) parent.getContext();
+        } else {
+            throw new RuntimeException(parent.getContext().toString()
+                    + " must implement OnRecyclerViewInteractionListener");
+        }
         return new ViewHolder(v);
     }
 
@@ -44,7 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         loadImageAndSet(holder, item);
 
-        holder.mImageView.setOnClickListener((v) -> onImageClickListener(v, position));
+        holder.mImageView.setOnClickListener((v) -> onImageViewPressed(mDataset.get(position).getImageURL()));
     }
 
     private void loadImageAndSet(ViewHolder holder, ImageItem item) {
@@ -68,17 +72,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 });
     }
 
-    private void onImageClickListener(View v, int position) {
-        Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
-        intent.putExtra(ImageDetailActivity.ARG_ITEM_ID, mDataset.get(position).getImageURL());
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((MainActivity) v.getContext(), v, "itemImageView");
-            v.getContext().startActivity(intent, options.toBundle());
-        } else {
-            v.getContext().startActivity(intent);
-        }
-    }
-
     private int getRandomColor() {
         Random rnd = new Random();
         return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -98,5 +91,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mImageView = v.findViewById(R.id.itemImageView);
             mProgressBar = v.findViewById(R.id.itemProgressBar);
         }
+    }
+
+    private void onImageViewPressed(String imageUrl) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(imageUrl);
+        }
+    }
+
+    public interface OnRecyclerViewInteractionListener {
+        void onFragmentInteraction(String imageUrl);
     }
 }
