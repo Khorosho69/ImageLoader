@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.antont.imageloader.R;
+import com.antont.imageloader.TextDrawer;
 import com.antont.imageloader.activities.ImageDetailActivity;
 import com.antont.imageloader.activities.MainActivity;
 import com.squareup.picasso.Callback;
@@ -41,32 +42,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.mImageView.setBackgroundColor(getRandomColor());
 
+        loadImageAndSet(holder, item);
+
+        holder.mImageView.setOnClickListener((v) -> onImageClickListener(v, position));
+    }
+
+    private void loadImageAndSet(ViewHolder holder, ImageItem item) {
         Picasso.with(holder.mImageView.getContext())
                 .load(item.getImageURL())
                 .fit()
                 .centerCrop()
-                .placeholder(R.drawable.placeholder_image)
                 .into(holder.mImageView, new Callback() {
                     @Override
                     public void onSuccess() {
                         holder.mImageView.setBackgroundColor(Color.WHITE);
                         holder.mProgressBar.setVisibility(View.GONE);
+
+                        TextDrawer drawer = new TextDrawer();
+                        drawer.drawTextOverImage(holder.mImageView, "New");
                     }
 
                     @Override
                     public void onError() {
-
                     }
                 });
+    }
 
-        holder.mImageView.setOnClickListener((v) -> {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((MainActivity) v.getContext());
-                Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
-                intent.putExtra(ImageDetailActivity.ARG_ITEM_ID, mDataset.get(position).getImageURL());
-                v.getContext().startActivity(intent, options.toBundle());
-            }
-        });
+    private void onImageClickListener(View v, int position) {
+        Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
+        intent.putExtra(ImageDetailActivity.ARG_ITEM_ID, mDataset.get(position).getImageURL());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((MainActivity) v.getContext(), v, "itemImageView");
+            v.getContext().startActivity(intent, options.toBundle());
+        } else {
+            v.getContext().startActivity(intent);
+        }
     }
 
     private int getRandomColor() {

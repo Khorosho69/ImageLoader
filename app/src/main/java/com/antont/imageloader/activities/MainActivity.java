@@ -26,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (viewModel.getImageItems().isEmpty()) {
             viewModel.addImageItem(new ImageItem("https://daphnecaruanagalizia.com/wp-content/uploads/2012/09/fox.jpg"));
-            viewModel.addImageItem(new ImageItem("http://cdn6.whiskeyriff.com/wp-content/uploads/2018/01/111.jpg"));
-            viewModel.addImageItem(new ImageItem("https://wallpaperscraft.com/image/fox_grass_snow_sit_hunting_31786_3840x2160.jpg"));
-            viewModel.addImageItem(new ImageItem("https://lh3.googleusercontent.com/Voh_Yd-nzxyiq7MDl2sJTM7-74MusbRuX_cL1w3n1jmLQ0yKcwhmzfy3BIRzNuQTxQ=h900"));
-            viewModel.addImageItem(new ImageItem("http://luchdesignstore.com/wp-content/uploads/2017/06/%D0%B0%D1%89%D1%87-%D0%B0%D1%84%D1%81%D1%83-%D0%B8%D0%B4.jpg"));
-            viewModel.addImageItem(new ImageItem("http://www.animalspot.net/wp-content/uploads/2015/02/Fox-Head-Wallpaper.jpg"));
-            viewModel.addImageItem(new ImageItem("https://static.boredpanda.com/blog/wp-content/uploads/2014/03/amazing-fox-photos-15.jpg"));
-            viewModel.addImageItem(new ImageItem("https://hdwallsource.com/img/2015/7/wonderful-fox-wallpaper-46022-47305-hd-wallpapers.jpg"));
-            viewModel.addImageItem(new ImageItem("https://i.ytimg.com/vi/H9UyWfzbxyQ/hqdefault.jpg"));
-            viewModel.addImageItem(new ImageItem("http://i.imgur.com/eiR04mR.jpg"));
+//            viewModel.addImageItem(new ImageItem("http://cdn6.whiskeyriff.com/wp-content/uploads/2018/01/111.jpg"));
+//            viewModel.addImageItem(new ImageItem("https://wallpaperscraft.com/image/fox_grass_snow_sit_hunting_31786_3840x2160.jpg"));
+//            viewModel.addImageItem(new ImageItem("https://lh3.googleusercontent.com/Voh_Yd-nzxyiq7MDl2sJTM7-74MusbRuX_cL1w3n1jmLQ0yKcwhmzfy3BIRzNuQTxQ=h900"));
+//            viewModel.addImageItem(new ImageItem("http://luchdesignstore.com/wp-content/uploads/2017/06/%D0%B0%D1%89%D1%87-%D0%B0%D1%84%D1%81%D1%83-%D0%B8%D0%B4.jpg"));
+//            viewModel.addImageItem(new ImageItem("http://www.animalspot.net/wp-content/uploads/2015/02/Fox-Head-Wallpaper.jpg"));
+//            viewModel.addImageItem(new ImageItem("https://static.boredpanda.com/blog/wp-content/uploads/2014/03/amazing-fox-photos-15.jpg"));
+//            viewModel.addImageItem(new ImageItem("https://hdwallsource.com/img/2015/7/wonderful-fox-wallpaper-46022-47305-hd-wallpapers.jpg"));
+//            viewModel.addImageItem(new ImageItem("https://i.ytimg.com/vi/H9UyWfzbxyQ/hqdefault.jpg"));
+//            viewModel.addImageItem(new ImageItem("http://i.imgur.com/eiR04mR.jpg"));
         }
         setupRecyclerView(viewModel.getImageItems());
     }
