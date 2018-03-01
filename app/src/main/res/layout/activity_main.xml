@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.antont.imageloader.activities.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <com.antont.imageloader.adapters.AutofitRecyclerView
         android:id="@+id/imageRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        />
+        android:clipToPadding="false"
+        android:columnWidth="136dp" />
 
 </android.support.constraint.ConstraintLayout>

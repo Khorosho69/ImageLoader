@@ -13,18 +13,22 @@ import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.antont.imageloader.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-public class ImageDetailActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback {
+import java.security.PublicKey;
+
+public class DetailActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback {
 
     public final static int PERMISSION_REQUEST_CODE = 1024;
-    public final static String ARG_ITEM_ID = "ARG_ITEM_ID";
+    public final static String ARG_ITEM_ID = "ARG_IMAGE_URL";
+    public final static String ARG_TRANSITION_NAME = "ARG_TRANSITION_NAME";
 
     private ImageView mImageView;
 
@@ -33,18 +37,47 @@ public class ImageDetailActivity extends AppCompatActivity implements OnRequestP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
 
+        mImageView = findViewById(R.id.itemDetailImageView);
+
         Intent intent = getIntent();
         String path = intent.getStringExtra(ARG_ITEM_ID);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mImageView.setTransitionName(intent.getStringExtra(ARG_TRANSITION_NAME));
+        }
+
         FloatingActionButton actionButton = findViewById(R.id.itemDetailFAB);
 
-        actionButton.setOnClickListener((View v) -> saveImage());
+        Picasso.with(this).load(path).into(mImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                scheduleStartPostponedTransition(mImageView);
+            }
 
-        mImageView = findViewById(R.id.itemDetailImageView);
-        Picasso.with(this).load(path).into(mImageView);
+            @Override
+            public void onError() {
+
+            }
+        });
+
+        actionButton.setOnClickListener((View v) -> checkAndroidPermission());
     }
 
-    private void saveImage() {
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            startPostponedEnterTransition();
+                        }
+                        return true;
+                    }
+                });
+    }
+
+    private void checkAndroidPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (isPermissionGranted()) {
                 saveImageToGallery();

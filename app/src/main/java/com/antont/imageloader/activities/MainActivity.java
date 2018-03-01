@@ -5,8 +5,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.antont.imageloader.R;
 
@@ -43,21 +43,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private void setupRecyclerView(List<ImageItem> appItems) {
         RecyclerView recyclerView = findViewById(R.id.imageRecyclerView);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
-        recyclerView.setLayoutManager(layoutManager);
-
-        RecyclerView.Adapter adapter = new RecyclerViewAdapter(appItems);
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(new RecyclerViewAdapter(appItems));
     }
 
     @Override
-    public void onFragmentInteraction(String imageUrl) {
-        Intent intent = new Intent(this, ImageDetailActivity.class);
-        intent.putExtra(ImageDetailActivity.ARG_ITEM_ID, imageUrl);
+    public void onFragmentInteraction(View view, String imageUrl) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.ARG_ITEM_ID, imageUrl);
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);//, v, "itemImageView");
+            intent.putExtra(DetailActivity.ARG_TRANSITION_NAME, view.getTransitionName());
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, view, view.getTransitionName());
             startActivity(intent, options.toBundle());
         } else {
             startActivity(intent);

@@ -1,7 +1,10 @@
 package com.antont.imageloader.adapters;
 
 import android.graphics.Color;
+import android.os.Build;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,18 +45,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        ImageItem item = mDataset.get(position);
-
         holder.mImageView.setBackgroundColor(getRandomColor());
 
-        loadImageAndSet(holder, item);
+        setImageToImageView(holder, position);
 
-        holder.mImageView.setOnClickListener((v) -> onImageViewPressed(mDataset.get(position).getImageURL()));
+        holder.mImageView.setOnClickListener((v) -> onImageViewPressed(holder.mImageView, mDataset.get(position).getImageURL()));
     }
 
-    private void loadImageAndSet(ViewHolder holder, ImageItem item) {
+    private void setImageToImageView(ViewHolder holder, int position) {
         Picasso.with(holder.mImageView.getContext())
-                .load(item.getImageURL())
+                .load(mDataset.get(position).getImageURL())
                 .fit()
                 .centerCrop()
                 .into(holder.mImageView, new Callback() {
@@ -64,6 +65,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                         TextDrawerUtility drawer = new TextDrawerUtility();
                         drawer.drawTextOverImage(holder.mImageView, "New");
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            holder.mImageView.setTransitionName("imageView" + position);
+                        }
                     }
 
                     @Override
@@ -93,13 +98,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    private void onImageViewPressed(String imageUrl) {
+    private void onImageViewPressed(View view, String imageUrl) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(imageUrl);
+            mListener.onFragmentInteraction(view, imageUrl);
         }
     }
 
     public interface OnRecyclerViewInteractionListener {
-        void onFragmentInteraction(String imageUrl);
+        void onFragmentInteraction(View view, String imageUrl);
     }
 }
