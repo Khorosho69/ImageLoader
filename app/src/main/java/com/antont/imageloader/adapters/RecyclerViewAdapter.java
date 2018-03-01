@@ -2,9 +2,7 @@ package com.antont.imageloader.adapters;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +17,13 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Random;
 
-import com.antont.imageloader.models.ImageItem;
-
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<ImageItem> mDataset;
+    private List<String> mDataset;
 
     private OnRecyclerViewInteractionListener mListener;
 
-    public RecyclerViewAdapter(List<ImageItem> mDataset) {
+    public RecyclerViewAdapter(List<String> mDataset) {
         this.mDataset = mDataset;
     }
 
@@ -37,8 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (parent.getContext() instanceof OnRecyclerViewInteractionListener) {
             mListener = (OnRecyclerViewInteractionListener) parent.getContext();
         } else {
-            throw new RuntimeException(parent.getContext().toString()
-                    + " must implement OnRecyclerViewInteractionListener");
+            throw new RuntimeException(parent.getContext().toString() + " must implement OnRecyclerViewInteractionListener");
         }
         return new ViewHolder(v);
     }
@@ -49,12 +44,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         setImageToImageView(holder, position);
 
-        holder.mImageView.setOnClickListener((v) -> onImageViewPressed(holder.mImageView, mDataset.get(position).getImageURL()));
+        holder.mImageView.setOnClickListener((v) -> onImageViewPressed(holder.mImageView, mDataset.get(position)));
     }
 
     private void setImageToImageView(ViewHolder holder, int position) {
         Picasso.with(holder.mImageView.getContext())
-                .load(mDataset.get(position).getImageURL())
+                .load(mDataset.get(position))
                 .fit()
                 .centerCrop()
                 .into(holder.mImageView, new Callback() {

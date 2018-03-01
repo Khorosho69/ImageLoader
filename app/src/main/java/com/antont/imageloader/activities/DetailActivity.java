@@ -37,6 +37,13 @@ public class DetailActivity extends AppCompatActivity implements OnRequestPermis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
 
+        setupImageView();
+
+        FloatingActionButton actionButton = findViewById(R.id.itemDetailFAB);
+        actionButton.setOnClickListener((View v) -> checkAndroidPermission());
+    }
+
+    private void setupImageView() {
         mImageView = findViewById(R.id.itemDetailImageView);
 
         Intent intent = getIntent();
@@ -46,35 +53,7 @@ public class DetailActivity extends AppCompatActivity implements OnRequestPermis
             mImageView.setTransitionName(intent.getStringExtra(ARG_TRANSITION_NAME));
         }
 
-        FloatingActionButton actionButton = findViewById(R.id.itemDetailFAB);
-
-        Picasso.with(this).load(path).into(mImageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                scheduleStartPostponedTransition(mImageView);
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
-
-        actionButton.setOnClickListener((View v) -> checkAndroidPermission());
-    }
-
-    private void scheduleStartPostponedTransition(final View sharedElement) {
-        sharedElement.getViewTreeObserver().addOnPreDrawListener(
-                new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            startPostponedEnterTransition();
-                        }
-                        return true;
-                    }
-                });
+        Picasso.with(this).load(path).into(mImageView);
     }
 
     private void checkAndroidPermission() {
